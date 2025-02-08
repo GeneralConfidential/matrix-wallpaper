@@ -45,17 +45,17 @@
             android:persistent="false"
             android:title="Character Set" />
 
-    <net.margaritov.preference.colorpicker.ColorPickerPreference
-        android:defaultValue="@color/default_bit_color"
-        android:key="bit_color"
-        android:summary="Choose the bit color"
-        android:title="Bit Color" />
+<!--    <net.margaritov.preference.colorpicker.ColorPickerPreference-->
+<!--        android:defaultValue="@color/default_bit_color"-->
+<!--        android:key="bit_color"-->
+<!--        android:summary="Choose the bit color"-->
+<!--        android:title="Bit Color" />-->
 
-    <net.margaritov.preference.colorpicker.ColorPickerPreference
-        android:defaultValue="@color/default_background_color"
-        android:key="background_color"
-        android:summary="Choose the background color"
-        android:title="Background Color" />
+<!--    <net.margaritov.preference.colorpicker.ColorPickerPreference-->
+<!--        android:defaultValue="@color/default_background_color"-->
+<!--        android:key="background_color"-->
+<!--        android:summary="Choose the background color"-->
+<!--        android:title="Background Color" />-->
 
     <CheckBoxPreference
         android:defaultValue="true"

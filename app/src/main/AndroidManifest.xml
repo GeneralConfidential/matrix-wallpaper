@@ -6,7 +6,7 @@
         android:icon="@drawable/ic_launcher"
         android:label="@string/app_name">
         <activity
-            android:name=".SettingsActivity"
+            android:name="com.gulshansingh.hackerlivewallpaper.SettingsActivity"
             android:theme="@style/AppTheme"
             android:exported="true">
             <intent-filter>
@@ -18,7 +18,7 @@
 
         <!-- TODO: Should this be exported? -->
         <service
-            android:name=".HackerWallpaperService"
+            android:name="com.gulshansingh.hackerlivewallpaper.HackerWallpaperService"
             android:label="@string/app_name"
             android:permission="android.permission.BIND_WALLPAPER"
             android:exported="true">

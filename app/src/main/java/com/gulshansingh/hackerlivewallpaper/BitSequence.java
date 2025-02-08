@@ -136,7 +136,7 @@ public class BitSequence {
 
 			PreferenceUtility preferences = new PreferenceUtility(context);
 
-            if (isRandom) {
+			if (isRandom) {
                 numBits = preferences.getInt(KEY_NUM_BITS,
                         R.integer.default_num_bits);
             } else {
@@ -263,8 +263,8 @@ public class BitSequence {
 	}
 
 	public BitSequence(int x) {
-        curChar = 0;
-        for (int i = 0; i < Style.numBits; i++) {
+		curChar = 0;
+		for (int i = 0; i < Style.numBits; i++) {
             if (isRandom) {
                 bits.add(getRandomBit(r));
             } else {
