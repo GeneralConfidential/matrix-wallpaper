@@ -99,7 +99,7 @@ public class BitSequence {
     private final Style style = new Style();
     private static String charSet;
     private static boolean isRandom = true;
-    private int curChar = 0;
+    private int curChar;
 
     public static class Style {
         /**
@@ -219,7 +219,7 @@ public class BitSequence {
             }
 
             public double getDouble(String key, int defaultId) {
-                return (double) preferences.getInt(key,
+                return preferences.getInt(key,
                         res.getInteger(defaultId));
             }
 
