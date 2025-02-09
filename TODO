@@ -1,0 +1,4 @@
+- Figure out why new preference values are not being used
+- Add back ColorPickerPreference
+- Fix overlapping toolbar
+- Change to built-in ArrayDeque (if it's easy, otherwise just release it)
