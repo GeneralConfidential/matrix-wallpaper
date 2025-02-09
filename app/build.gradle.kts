@@ -35,6 +35,7 @@ dependencies {
     implementation(libs.preference)
     implementation(libs.appcompat)
     implementation(libs.material)
+    implementation(libs.colorpickerpreference)
     testImplementation(libs.junit)
     androidTestImplementation(libs.ext.junit)
     androidTestImplementation(libs.espresso.core)
