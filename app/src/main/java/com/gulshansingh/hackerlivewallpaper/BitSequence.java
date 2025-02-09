@@ -77,7 +77,8 @@ public class BitSequence {
     /**
      * The position to draw the sequence at on the screen
      */
-    float x, y;
+    final float x;
+    float y;
 
     /**
      * True when the BitSequence should be paused
@@ -132,32 +133,38 @@ public class BitSequence {
                     .getDefaultSharedPreferences(context);
             String charSetName = sp.getString("character_set_name", "Binary");
             isRandom = true;
-            if (charSetName.equals("Binary")) {
-                charSet = CharacterSetPreference.BINARY_CHAR_SET;
-            } else if (charSetName.equals("Matrix")) {
-                charSet = CharacterSetPreference.MATRIX_CHAR_SET;
-            } else if (charSetName.equals("Custom (random characters)")) {
-                charSet = sp.getString("custom_character_set", "");
-                if (charSet.isEmpty()) {
-                    throw new RuntimeException("Character set length can't be 0");
-                }
-            } else if (charSetName.equals("Custom (exact text)")) {
-                isRandom = false;
-                charSet = sp.getString("custom_character_string", "");
-                if (charSet.isEmpty()) {
-                    throw new RuntimeException("Character set length can't be 0");
-                }
-            } else {
-                if (!charSetName.equals("Custom")) { // Legacy character set
-                    throw new RuntimeException("Invalid character set " + charSetName);
-                } else {
-                    sp.edit().putString("character_set_name", "Custom (random characters)")
-                            .commit();
+            switch (charSetName) {
+                case "Binary":
+                    charSet = CharacterSetPreference.BINARY_CHAR_SET;
+                    break;
+                case "Matrix":
+                    charSet = CharacterSetPreference.MATRIX_CHAR_SET;
+                    break;
+                case "Custom (random characters)":
                     charSet = sp.getString("custom_character_set", "");
                     if (charSet.isEmpty()) {
                         throw new RuntimeException("Character set length can't be 0");
                     }
-                }
+                    break;
+                case "Custom (exact text)":
+                    isRandom = false;
+                    charSet = sp.getString("custom_character_string", "");
+                    if (charSet.isEmpty()) {
+                        throw new RuntimeException("Character set length can't be 0");
+                    }
+                    break;
+                default:
+                    if (!charSetName.equals("Custom")) { // Legacy character set
+                        throw new RuntimeException("Invalid character set " + charSetName);
+                    } else {
+                        sp.edit().putString("character_set_name", "Custom (random characters)")
+                                .commit();
+                        charSet = sp.getString("custom_character_set", "");
+                        if (charSet.isEmpty()) {
+                            throw new RuntimeException("Character set length can't be 0");
+                        }
+                    }
+                    break;
             }
             symbols = charSet.split("(?!^)");
 

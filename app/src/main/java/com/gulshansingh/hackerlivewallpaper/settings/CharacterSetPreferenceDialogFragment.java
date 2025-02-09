@@ -91,30 +91,36 @@ public class CharacterSetPreferenceDialogFragment extends PreferenceDialogFragme
         SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(getContext());
 
         String characterSet;
-        if (characterSetName.equals("Binary")) {
-            characterSet = BINARY_CHAR_SET;
-            mEditText.setEnabled(false);
-        } else if (characterSetName.equals("Matrix")) {
-            characterSet = MATRIX_CHAR_SET;
-            mEditText.setEnabled(false);
-        } else if (characterSetName.equals("Custom (random characters)")) {
-            mEditText.setEnabled(true);
-            characterSet = sp.getString("custom_character_set", "");
-            disablePosButton(characterSet.isEmpty());
-        } else if (characterSetName.equals("Custom (exact text)")) {
-            mEditText.setEnabled(true);
-            characterSet = sp.getString("custom_character_string", "");
-            disablePosButton(characterSet.isEmpty());
-        } else {
-            if (!characterSetName.equals("Custom")) { // Legacy charset name
-                throw new RuntimeException("Invalid character set " + characterSetName);
-            } else {
-                sp.edit().putString("character_set_name", "Custom (random characters)")
-                        .apply();
+        switch (characterSetName) {
+            case "Binary":
+                characterSet = BINARY_CHAR_SET;
+                mEditText.setEnabled(false);
+                break;
+            case "Matrix":
+                characterSet = MATRIX_CHAR_SET;
+                mEditText.setEnabled(false);
+                break;
+            case "Custom (random characters)":
                 mEditText.setEnabled(true);
                 characterSet = sp.getString("custom_character_set", "");
                 disablePosButton(characterSet.isEmpty());
-            }
+                break;
+            case "Custom (exact text)":
+                mEditText.setEnabled(true);
+                characterSet = sp.getString("custom_character_string", "");
+                disablePosButton(characterSet.isEmpty());
+                break;
+            default:
+                if (!characterSetName.equals("Custom")) { // Legacy charset name
+                    throw new RuntimeException("Invalid character set " + characterSetName);
+                } else {
+                    sp.edit().putString("character_set_name", "Custom (random characters)")
+                            .apply();
+                    mEditText.setEnabled(true);
+                    characterSet = sp.getString("custom_character_set", "");
+                    disablePosButton(characterSet.isEmpty());
+                }
+                break;
         }
 
         mEditText.setText(characterSet);
