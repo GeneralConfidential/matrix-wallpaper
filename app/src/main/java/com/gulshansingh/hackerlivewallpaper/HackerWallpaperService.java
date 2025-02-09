@@ -32,20 +32,20 @@ public class HackerWallpaperService extends WallpaperService {
 
     public class HackerWallpaperEngine extends Engine {
 
-        private Handler handler = new Handler();
+        private final Handler handler = new Handler();
         private boolean visible = true;
 
         /**
          * The sequences to draw on the screen
          */
-        private List<BitSequence> sequences = new ArrayList<>();
+        private final List<BitSequence> sequences = new ArrayList<>();
 
         private int width;
 
         /**
          * The main runnable that is given to the Handler to draw the animation
          */
-        private Runnable drawRunnable = new Runnable() {
+        private final Runnable drawRunnable = new Runnable() {
             public void run() {
                 draw();
             }

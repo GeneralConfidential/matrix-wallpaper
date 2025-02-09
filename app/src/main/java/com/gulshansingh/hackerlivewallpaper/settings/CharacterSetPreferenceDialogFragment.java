@@ -30,7 +30,7 @@ public class CharacterSetPreferenceDialogFragment extends PreferenceDialogFragme
     private EditText mEditText;
     private Spinner mSpinner;
 
-    private Preference mPreference;
+    private final Preference mPreference;
 
     public CharacterSetPreferenceDialogFragment(Preference preference) {
         mPreference = preference;
@@ -84,11 +84,7 @@ public class CharacterSetPreferenceDialogFragment extends PreferenceDialogFragme
 
     private void disablePosButton(boolean disable) {
         Button posButton = ((AlertDialog) getDialog()).getButton(AlertDialog.BUTTON_POSITIVE);
-        if (disable) {
-            posButton.setEnabled(false);
-        } else {
-            posButton.setEnabled(true);
-        }
+        posButton.setEnabled(!disable);
     }
 
     private void updateEditText(String characterSetName) {
@@ -104,11 +100,11 @@ public class CharacterSetPreferenceDialogFragment extends PreferenceDialogFragme
         } else if (characterSetName.equals("Custom (random characters)")) {
             mEditText.setEnabled(true);
             characterSet = sp.getString("custom_character_set", "");
-            disablePosButton(characterSet.length() == 0);
+            disablePosButton(characterSet.isEmpty());
         } else if (characterSetName.equals("Custom (exact text)")) {
             mEditText.setEnabled(true);
             characterSet = sp.getString("custom_character_string", "");
-            disablePosButton(characterSet.length() == 0);
+            disablePosButton(characterSet.isEmpty());
         } else {
             if (!characterSetName.equals("Custom")) { // Legacy charset name
                 throw new RuntimeException("Invalid character set " + characterSetName);
@@ -117,7 +113,7 @@ public class CharacterSetPreferenceDialogFragment extends PreferenceDialogFragme
                         .apply();
                 mEditText.setEnabled(true);
                 characterSet = sp.getString("custom_character_set", "");
-                disablePosButton(characterSet.length() == 0);
+                disablePosButton(characterSet.isEmpty());
             }
         }
 

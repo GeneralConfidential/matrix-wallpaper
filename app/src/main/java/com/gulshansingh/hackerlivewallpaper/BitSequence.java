@@ -62,12 +62,12 @@ public class BitSequence {
     /**
      * The bits this sequence stores
      */
-    private ArrayDeque<String> bits = new ArrayDeque<>();
+    private final ArrayDeque<String> bits = new ArrayDeque<>();
 
     /**
      * A variable used for all operations needing random numbers
      */
-    private Random r = new Random();
+    private final Random r = new Random();
 
     /**
      * The scheduled operation for changing a bit and shifting downwards
@@ -125,7 +125,7 @@ public class BitSequence {
         private int fallingSpeed;
         private BlurMaskFilter maskFilter;
 
-        private Paint paint = new Paint();
+        private final Paint paint = new Paint();
 
         public static void initParameters(Context context) {
             SharedPreferences sp = PreferenceManager
@@ -138,13 +138,13 @@ public class BitSequence {
                 charSet = CharacterSetPreference.MATRIX_CHAR_SET;
             } else if (charSetName.equals("Custom (random characters)")) {
                 charSet = sp.getString("custom_character_set", "");
-                if (charSet.length() == 0) {
+                if (charSet.isEmpty()) {
                     throw new RuntimeException("Character set length can't be 0");
                 }
             } else if (charSetName.equals("Custom (exact text)")) {
                 isRandom = false;
                 charSet = sp.getString("custom_character_string", "");
-                if (charSet.length() == 0) {
+                if (charSet.isEmpty()) {
                     throw new RuntimeException("Character set length can't be 0");
                 }
             } else {
@@ -154,7 +154,7 @@ public class BitSequence {
                     sp.edit().putString("character_set_name", "Custom (random characters)")
                             .commit();
                     charSet = sp.getString("custom_character_set", "");
-                    if (charSet.length() == 0) {
+                    if (charSet.isEmpty()) {
                         throw new RuntimeException("Character set length can't be 0");
                     }
                 }
@@ -198,8 +198,8 @@ public class BitSequence {
         }
 
         private static class PreferenceUtility {
-            private SharedPreferences preferences;
-            private Resources res;
+            private final SharedPreferences preferences;
+            private final Resources res;
 
             public PreferenceUtility(Context context) {
                 preferences = PreferenceManager
