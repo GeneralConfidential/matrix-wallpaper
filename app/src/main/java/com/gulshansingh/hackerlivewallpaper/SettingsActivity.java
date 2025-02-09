@@ -95,28 +95,25 @@ public class SettingsActivity extends AppCompatActivity {
             addPreferencesFromResource(R.xml.prefs);
 
             Preference setAsWallpaper = findPreference("set_as_wallpaper");
-            setAsWallpaper.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
-                @Override
-                public boolean onPreferenceClick(Preference pref) {
-                    Intent i = new Intent();
-                    try {
-                        if (Build.VERSION.SDK_INT > 15) {
-                            i.setAction(WallpaperManager.ACTION_CHANGE_LIVE_WALLPAPER);
+            setAsWallpaper.setOnPreferenceClickListener(pref -> {
+                Intent i = new Intent();
+                try {
+                    if (Build.VERSION.SDK_INT > 15) {
+                        i.setAction(WallpaperManager.ACTION_CHANGE_LIVE_WALLPAPER);
 
-                            String p = HackerWallpaperService.class.getPackage().getName();
-                            String c = HackerWallpaperService.class.getCanonicalName();
-                            i.putExtra(WallpaperManager.EXTRA_LIVE_WALLPAPER_COMPONENT,
-                                    new ComponentName(p, c));
-                        } else {
-                            i.setAction(WallpaperManager.ACTION_LIVE_WALLPAPER_CHOOSER);
-                        }
-                    } catch (ActivityNotFoundException e) {
-                        // Fallback to the old method, some devices greater than SDK 15 are crashing
+                        String p = HackerWallpaperService.class.getPackage().getName();
+                        String c = HackerWallpaperService.class.getCanonicalName();
+                        i.putExtra(WallpaperManager.EXTRA_LIVE_WALLPAPER_COMPONENT,
+                                new ComponentName(p, c));
+                    } else {
                         i.setAction(WallpaperManager.ACTION_LIVE_WALLPAPER_CHOOSER);
                     }
-                    startActivity(i);
-                    return true;
+                } catch (ActivityNotFoundException e) {
+                    // Fallback to the old method, some devices greater than SDK 15 are crashing
+                    i.setAction(WallpaperManager.ACTION_LIVE_WALLPAPER_CHOOSER);
                 }
+                startActivity(i);
+                return true;
             });
         }
 

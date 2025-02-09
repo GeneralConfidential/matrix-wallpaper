@@ -45,11 +45,7 @@ public class HackerWallpaperService extends WallpaperService {
         /**
          * The main runnable that is given to the Handler to draw the animation
          */
-        private final Runnable drawRunnable = new Runnable() {
-            public void run() {
-                draw();
-            }
-        };
+        private final Runnable drawRunnable = this::draw;
 
         /**
          * Draws all of the bit sequences on the screen
