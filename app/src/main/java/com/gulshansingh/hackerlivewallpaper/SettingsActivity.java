@@ -10,6 +10,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
 import androidx.fragment.app.DialogFragment;
 import androidx.preference.Preference;
 import androidx.preference.PreferenceFragmentCompat;
@@ -30,7 +31,9 @@ public class SettingsActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        // No need to call `setContentView`, the fragment will be set in `onStart`
+        setContentView(R.layout.activity_settings);
+        Toolbar toolbar = findViewById(R.id.toolbar);
+        setSupportActionBar(toolbar);
     }
 
     @Override
@@ -85,7 +88,7 @@ public class SettingsActivity extends AppCompatActivity {
     public void restartFragment() {
         getSupportFragmentManager()
                 .beginTransaction()
-                .replace(android.R.id.content, new SettingsFragment())
+                .replace(R.id.fragment_container, new SettingsFragment())
                 .commit();
     }
 
