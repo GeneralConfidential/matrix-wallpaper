@@ -9,14 +9,14 @@ import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
 
-import com.gulshansingh.hackerlivewallpaper.settings.CharacterSetPreference;
-import com.gulshansingh.hackerlivewallpaper.settings.CharacterSetPreferenceDialogFragment;
-
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.DialogFragment;
 import androidx.preference.Preference;
 import androidx.preference.PreferenceFragmentCompat;
 import androidx.preference.PreferenceManager;
+
+import com.gulshansingh.hackerlivewallpaper.settings.CharacterSetPreference;
+import com.gulshansingh.hackerlivewallpaper.settings.CharacterSetPreferenceDialogFragment;
 
 public class SettingsActivity extends AppCompatActivity {
     public static final String KEY_BACKGROUND_COLOR = "background_color";

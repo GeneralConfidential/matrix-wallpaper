@@ -33,6 +33,7 @@
  */
 
 package com.gulshansingh.hackerlivewallpaper.thirdparty;
+
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
@@ -89,14 +90,13 @@ import java.util.Stack;
  * <a href="{@docRoot}/../technotes/guides/collections/index.html">
  * Java Collections Framework</a>.
  *
- * @author  Josh Bloch and Doug Lea
- * @since   1.6
  * @param <E> the type of elements held in this collection
+ * @author Josh Bloch and Doug Lea
+ * @since 1.6
  */
 @SuppressWarnings("unchecked")
 public class ArrayDeque<E> extends AbstractCollection<E>
-                           implements Deque<E>, Cloneable, Serializable
-{
+        implements Deque<E>, Cloneable, Serializable {
     /**
      * The array in which the elements of the deque are stored.
      * The capacity of the deque is the length of this array, which is
@@ -133,7 +133,7 @@ public class ArrayDeque<E> extends AbstractCollection<E>
     /**
      * Allocate empty array to hold the given number of elements.
      *
-     * @param numElements  the number of elements to hold
+     * @param numElements the number of elements to hold
      */
     private void allocateElements(int numElements) {
         int initialCapacity = MIN_INITIAL_CAPACITY;
@@ -141,10 +141,10 @@ public class ArrayDeque<E> extends AbstractCollection<E>
         // Tests "<=" because arrays aren't kept full.
         if (numElements >= initialCapacity) {
             initialCapacity = numElements;
-            initialCapacity |= (initialCapacity >>>  1);
-            initialCapacity |= (initialCapacity >>>  2);
-            initialCapacity |= (initialCapacity >>>  4);
-            initialCapacity |= (initialCapacity >>>  8);
+            initialCapacity |= (initialCapacity >>> 1);
+            initialCapacity |= (initialCapacity >>> 2);
+            initialCapacity |= (initialCapacity >>> 4);
+            initialCapacity |= (initialCapacity >>> 8);
             initialCapacity |= (initialCapacity >>> 16);
             initialCapacity++;
 
@@ -169,7 +169,7 @@ public class ArrayDeque<E> extends AbstractCollection<E>
         Object[] a = new Object[newCapacity];
         System.arraycopy(elements, p, a, 0, r);
         System.arraycopy(elements, 0, a, r, p);
-        elements = (E[])a;
+        elements = (E[]) a;
         head = 0;
         tail = n;
     }
@@ -204,7 +204,7 @@ public class ArrayDeque<E> extends AbstractCollection<E>
      * Constructs an empty array deque with an initial capacity
      * sufficient to hold the specified number of elements.
      *
-     * @param numElements  lower bound on initial capacity of the deque
+     * @param numElements lower bound on initial capacity of the deque
      */
     public ArrayDeque(int numElements) {
         allocateElements(numElements);
@@ -255,7 +255,7 @@ public class ArrayDeque<E> extends AbstractCollection<E>
         if (e == null)
             throw new NullPointerException();
         elements[tail] = e;
-        if ( (tail = (tail + 1) & (elements.length - 1)) == head)
+        if ((tail = (tail + 1) & (elements.length - 1)) == head)
             doubleCapacity();
     }
 
@@ -369,7 +369,7 @@ public class ArrayDeque<E> extends AbstractCollection<E>
         int mask = elements.length - 1;
         int i = head;
         E x;
-        while ( (x = elements[i]) != null) {
+        while ((x = elements[i]) != null) {
             if (o.equals(x)) {
                 delete(i);
                 return true;
@@ -397,7 +397,7 @@ public class ArrayDeque<E> extends AbstractCollection<E>
         int mask = elements.length - 1;
         int i = (tail - 1) & mask;
         E x;
-        while ( (x = elements[i]) != null) {
+        while ((x = elements[i]) != null) {
             if (o.equals(x)) {
                 delete(i);
                 return true;
@@ -438,7 +438,7 @@ public class ArrayDeque<E> extends AbstractCollection<E>
 
     /**
      * Retrieves and removes the head of the queue represented by this deque.
-     *
+     * <p>
      * This method differs from {@link #poll poll} only in that it throws an
      * exception if this deque is empty.
      *
@@ -459,7 +459,7 @@ public class ArrayDeque<E> extends AbstractCollection<E>
      * <p>This method is equivalent to {@link #pollFirst}.
      *
      * @return the head of the queue represented by this deque, or
-     *         <tt>null</tt> if this deque is empty
+     * <tt>null</tt> if this deque is empty
      */
     public E poll() {
         return pollFirst();
@@ -486,7 +486,7 @@ public class ArrayDeque<E> extends AbstractCollection<E>
      * <p>This method is equivalent to {@link #peekFirst}.
      *
      * @return the head of the queue represented by this deque, or
-     *         <tt>null</tt> if this deque is empty
+     * <tt>null</tt> if this deque is empty
      */
     public E peek() {
         return peekFirst();
@@ -514,7 +514,7 @@ public class ArrayDeque<E> extends AbstractCollection<E>
      * <p>This method is equivalent to {@link #removeFirst()}.
      *
      * @return the element at the front of this deque (which is the top
-     *         of the stack represented by this deque)
+     * of the stack represented by this deque)
      * @throws NoSuchElementException {@inheritDoc}
      */
     public E pop() {
@@ -524,8 +524,8 @@ public class ArrayDeque<E> extends AbstractCollection<E>
     private void checkInvariants() {
         assert elements[tail] == null;
         assert head == tail ? elements[head] == null :
-            (elements[head] != null &&
-             elements[(tail - 1) & (elements.length - 1)] != null);
+                (elements[head] != null &&
+                        elements[(tail - 1) & (elements.length - 1)] != null);
         assert elements[(head - 1) & (elements.length - 1)] == null;
     }
 
@@ -546,7 +546,7 @@ public class ArrayDeque<E> extends AbstractCollection<E>
         final int h = head;
         final int t = tail;
         final int front = (i - h) & mask;
-        final int back  = (t - i) & mask;
+        final int back = (t - i) & mask;
 
         // Invariant: head <= i < tail mod circularity
         if (front >= ((t - h) & mask))
@@ -710,7 +710,7 @@ public class ArrayDeque<E> extends AbstractCollection<E>
         int mask = elements.length - 1;
         int i = head;
         E x;
-        while ( (x = elements[i]) != null) {
+        while ((x = elements[i]) != null) {
             if (o.equals(x))
                 return true;
             i = (i + 1) & mask;
@@ -794,7 +794,7 @@ public class ArrayDeque<E> extends AbstractCollection<E>
      *
      * <pre>
      *     String[] y = x.toArray(new String[0]);</pre>
-     *
+     * <p>
      * Note that <tt>toArray(new Object[0])</tt> is identical in function to
      * <tt>toArray()</tt>.
      *
@@ -802,15 +802,15 @@ public class ArrayDeque<E> extends AbstractCollection<E>
      *          be stored, if it is big enough; otherwise, a new array of the
      *          same runtime type is allocated for this purpose
      * @return an array containing all of the elements in this deque
-     * @throws ArrayStoreException if the runtime type of the specified array
-     *         is not a supertype of the runtime type of every element in
-     *         this deque
+     * @throws ArrayStoreException  if the runtime type of the specified array
+     *                              is not a supertype of the runtime type of every element in
+     *                              this deque
      * @throws NullPointerException if the specified array is null
      */
     public <T> T[] toArray(T[] a) {
         int size = size();
         if (a.length < size)
-            a = (T[])java.lang.reflect.Array.newInstance(
+            a = (T[]) java.lang.reflect.Array.newInstance(
                     a.getClass().getComponentType(), size);
         copyElements(a);
         if (a.length > size)
@@ -828,7 +828,7 @@ public class ArrayDeque<E> extends AbstractCollection<E>
     public ArrayDeque<E> clone() {
         try {
             ArrayDeque<E> result = (ArrayDeque<E>) super.clone();
-			result.elements = copyOf(elements, elements.length);
+            result.elements = copyOf(elements, elements.length);
             return result;
 
         } catch (CloneNotSupportedException e) {
@@ -836,68 +836,58 @@ public class ArrayDeque<E> extends AbstractCollection<E>
         }
     }
 
-	/**
-	 * Copies the specified array, truncating or padding with nulls (if
-	 * necessary) so the copy has the specified length. For all indices that are
-	 * valid in both the original array and the copy, the two arrays will
-	 * contain identical values. For any indices that are valid in the copy but
-	 * not the original, the copy will contain <tt>null</tt>. Such indices will
-	 * exist if and only if the specified length is greater than that of the
-	 * original array. The resulting array is of exactly the same class as the
-	 * original array.
-	 * 
-	 * @param original
-	 *            the array to be copied
-	 * @param newLength
-	 *            the length of the copy to be returned
-	 * @return a copy of the original array, truncated or padded with nulls to
-	 *         obtain the specified length
-	 * @throws NegativeArraySizeException
-	 *             if <tt>newLength</tt> is negative
-	 * @throws NullPointerException
-	 *             if <tt>original</tt> is null
-	 * @since 1.6
-	 */
-	public static <T> T[] copyOf(T[] original, int newLength) {
-		return (T[]) copyOf(original, newLength, original.getClass());
-	}
+    /**
+     * Copies the specified array, truncating or padding with nulls (if
+     * necessary) so the copy has the specified length. For all indices that are
+     * valid in both the original array and the copy, the two arrays will
+     * contain identical values. For any indices that are valid in the copy but
+     * not the original, the copy will contain <tt>null</tt>. Such indices will
+     * exist if and only if the specified length is greater than that of the
+     * original array. The resulting array is of exactly the same class as the
+     * original array.
+     *
+     * @param original  the array to be copied
+     * @param newLength the length of the copy to be returned
+     * @return a copy of the original array, truncated or padded with nulls to
+     * obtain the specified length
+     * @throws NegativeArraySizeException if <tt>newLength</tt> is negative
+     * @throws NullPointerException       if <tt>original</tt> is null
+     * @since 1.6
+     */
+    public static <T> T[] copyOf(T[] original, int newLength) {
+        return (T[]) copyOf(original, newLength, original.getClass());
+    }
 
-	/**
-	 * Copies the specified array, truncating or padding with nulls (if
-	 * necessary) so the copy has the specified length. For all indices that are
-	 * valid in both the original array and the copy, the two arrays will
-	 * contain identical values. For any indices that are valid in the copy but
-	 * not the original, the copy will contain <tt>null</tt>. Such indices will
-	 * exist if and only if the specified length is greater than that of the
-	 * original array. The resulting array is of the class <tt>newType</tt>.
-	 * 
-	 * @param original
-	 *            the array to be copied
-	 * @param newLength
-	 *            the length of the copy to be returned
-	 * @param newType
-	 *            the class of the copy to be returned
-	 * @return a copy of the original array, truncated or padded with nulls to
-	 *         obtain the specified length
-	 * @throws NegativeArraySizeException
-	 *             if <tt>newLength</tt> is negative
-	 * @throws NullPointerException
-	 *             if <tt>original</tt> is null
-	 * @throws ArrayStoreException
-	 *             if an element copied from <tt>original</tt> is not of a
-	 *             runtime type that can be stored in an array of class
-	 *             <tt>newType</tt>
-	 * @since 1.6
-	 */
-	public static <T, U> T[] copyOf(U[] original, int newLength,
-			Class<? extends T[]> newType) {
-		T[] copy = ((Object) newType == (Object) Object[].class) ? (T[]) new Object[newLength]
-				: (T[]) Array
-						.newInstance(newType.getComponentType(), newLength);
-		System.arraycopy(original, 0, copy, 0,
-				Math.min(original.length, newLength));
-		return copy;
-	}
+    /**
+     * Copies the specified array, truncating or padding with nulls (if
+     * necessary) so the copy has the specified length. For all indices that are
+     * valid in both the original array and the copy, the two arrays will
+     * contain identical values. For any indices that are valid in the copy but
+     * not the original, the copy will contain <tt>null</tt>. Such indices will
+     * exist if and only if the specified length is greater than that of the
+     * original array. The resulting array is of the class <tt>newType</tt>.
+     *
+     * @param original  the array to be copied
+     * @param newLength the length of the copy to be returned
+     * @param newType   the class of the copy to be returned
+     * @return a copy of the original array, truncated or padded with nulls to
+     * obtain the specified length
+     * @throws NegativeArraySizeException if <tt>newLength</tt> is negative
+     * @throws NullPointerException       if <tt>original</tt> is null
+     * @throws ArrayStoreException        if an element copied from <tt>original</tt> is not of a
+     *                                    runtime type that can be stored in an array of class
+     *                                    <tt>newType</tt>
+     * @since 1.6
+     */
+    public static <T, U> T[] copyOf(U[] original, int newLength,
+                                    Class<? extends T[]> newType) {
+        T[] copy = ((Object) newType == (Object) Object[].class) ? (T[]) new Object[newLength]
+                : (T[]) Array
+                .newInstance(newType.getComponentType(), newLength);
+        System.arraycopy(original, 0, copy, 0,
+                Math.min(original.length, newLength));
+        return copy;
+    }
 
     /**
      * Appease the serialization gods.
@@ -938,10 +928,10 @@ public class ArrayDeque<E> extends AbstractCollection<E>
 
         // Read in all elements in the proper order.
         for (int i = 0; i < size; i++)
-            elements[i] = (E)s.readObject();
+            elements[i] = (E) s.readObject();
     }
-    
-	public E get(int index) {
-		return elements[(head + index) % elements.length];
-	}
+
+    public E get(int index) {
+        return elements[(head + index) % elements.length];
+    }
 }

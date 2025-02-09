@@ -13,15 +13,15 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Spinner;
 
-import com.gulshansingh.hackerlivewallpaper.R;
-
-import java.util.Arrays;
-import java.util.List;
-
 import androidx.appcompat.app.AlertDialog;
 import androidx.preference.Preference;
 import androidx.preference.PreferenceDialogFragmentCompat;
 import androidx.preference.PreferenceManager;
+
+import com.gulshansingh.hackerlivewallpaper.R;
+
+import java.util.Arrays;
+import java.util.List;
 
 public class CharacterSetPreferenceDialogFragment extends PreferenceDialogFragmentCompat {
     public static final String BINARY_CHAR_SET = "01";
