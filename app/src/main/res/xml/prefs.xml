@@ -52,6 +52,9 @@
         android:summary="Choose the bit color"
         android:title="Bit Color"
         app:default_color="@color/default_bit_color"
+        app:preference_dialog_title="@string/bit_color_dialog_title"
+        app:preference_dialog_positive="@android:string/ok"
+        app:preference_dialog_negative="@android:string/cancel"
         app:preference_attachAlphaSlideBar="false"
         app:preference_attachBrightnessSlideBar="true" />
 
@@ -61,6 +64,9 @@
         android:summary="Choose the background color"
         android:title="Background Color"
         app:default_color="@color/default_background_color"
+        app:preference_dialog_title="@string/background_color_dialog_title"
+        app:preference_dialog_positive="@android:string/ok"
+        app:preference_dialog_negative="@android:string/cancel"
         app:preference_attachAlphaSlideBar="false"
         app:preference_attachBrightnessSlideBar="true" />
 

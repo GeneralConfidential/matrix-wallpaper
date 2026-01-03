@@ -18,6 +18,7 @@ import androidx.preference.PreferenceManager;
 
 import com.gulshansingh.hackerlivewallpaper.settings.CharacterSetPreference;
 import com.gulshansingh.hackerlivewallpaper.settings.CharacterSetPreferenceDialogFragment;
+import com.skydoves.colorpickerview.preference.ColorPickerPreferenceManager;
 
 public class SettingsActivity extends AppCompatActivity {
     public static final String KEY_BACKGROUND_COLOR = "background_color";
@@ -78,6 +79,7 @@ public class SettingsActivity extends AppCompatActivity {
                 .edit()
                 .clear()
                 .apply();
+        ColorPickerPreferenceManager.getInstance(this).clearSavedAllData();
         PreferenceManager.setDefaultValues(this, R.xml.prefs, true);
     }
 

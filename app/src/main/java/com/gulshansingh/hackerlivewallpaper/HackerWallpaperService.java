@@ -2,13 +2,14 @@ package com.gulshansingh.hackerlivewallpaper;
 
 import static com.gulshansingh.hackerlivewallpaper.SettingsActivity.KEY_BACKGROUND_COLOR;
 
-import android.content.SharedPreferences;
 import android.graphics.Canvas;
 import android.os.Handler;
 import android.service.wallpaper.WallpaperService;
 import android.view.SurfaceHolder;
 
 import androidx.preference.PreferenceManager;
+
+import android.content.SharedPreferences;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -91,7 +92,8 @@ public class HackerWallpaperService extends WallpaperService {
         // TODO: Not all of the sequences need to be cleared
         private void resetSequences() {
             SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
-            int color = preferences.getInt(KEY_BACKGROUND_COLOR, 0);
+            int defaultColor = getApplicationContext().getColor(R.color.default_background_color);
+            int color = preferences.getInt(KEY_BACKGROUND_COLOR, defaultColor);
             r = (color >> 16) & 0xFF;
             g = (color >> 8) & 0xFF;
             b = (color >> 0) & 0xFF;

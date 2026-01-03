@@ -176,8 +176,8 @@ public class BitSequence {
             } else {
                 numBits = charSet.length();
             }
-            color = preferences
-                    .getInt(KEY_BIT_COLOR, R.color.default_bit_color);
+            int defaultColor = context.getColor(R.color.default_bit_color);
+            color = preferences.getColor(KEY_BIT_COLOR, defaultColor);
             defaultTextSize = preferences.getInt(KEY_TEXT_SIZE,
                     R.integer.default_text_size);
 
@@ -216,6 +216,10 @@ public class BitSequence {
 
             public int getInt(String key, int defaultId) {
                 return preferences.getInt(key, res.getInteger(defaultId));
+            }
+
+            public int getColor(String key, int defaultValue) {
+                return preferences.getInt(key, defaultValue);
             }
 
             public double getDouble(String key, int defaultId) {
