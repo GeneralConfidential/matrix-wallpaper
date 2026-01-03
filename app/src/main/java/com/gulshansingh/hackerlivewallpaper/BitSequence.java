@@ -18,7 +18,7 @@ import android.graphics.Paint;
 import androidx.preference.PreferenceManager;
 
 import com.gulshansingh.hackerlivewallpaper.settings.CharacterSetPreference;
-import com.gulshansingh.hackerlivewallpaper.thirdparty.ArrayDeque;
+import java.util.ArrayDeque;
 
 import java.util.Random;
 import java.util.concurrent.Executors;
@@ -411,8 +411,8 @@ public class BitSequence {
         Paint paint = style.paint;
         float bitY = y;
         paint.setAlpha(Style.alphaIncrement);
-        for (int i = 0; i < bits.size(); i++) {
-            canvas.drawText(bits.get(i), x, bitY, paint);
+        for (String bit : bits) {
+            canvas.drawText(bit, x, bitY, paint);
             bitY += style.textSize;
             paint.setAlpha(paint.getAlpha() + Style.alphaIncrement);
         }
