@@ -7,6 +7,7 @@ appcompat = "1.7.0"
 material = "1.12.0"
 preference = "1.2.1"
 colorpickerpreference = "2.0.6"
+robolectric = "4.12.2"
 
 [libraries]
 junit = { group = "junit", name = "junit", version.ref = "junit" }
@@ -16,6 +17,7 @@ appcompat = { group = "androidx.appcompat", name = "appcompat", version.ref = "a
 material = { group = "com.google.android.material", name = "material", version.ref = "material" }
 preference = { group = "androidx.preference", name = "preference", version.ref = "preference" }
 colorpickerpreference = { group = "com.github.skydoves", name = "colorpickerpreference", version.ref = "colorpickerpreference" }
+robolectric = { group = "org.robolectric", name = "robolectric", version.ref = "robolectric" }
 
 [plugins]
 android-application = { id = "com.android.application", version.ref = "agp" }
