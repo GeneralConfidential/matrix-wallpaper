@@ -13,10 +13,6 @@ import com.gulshansingh.hackerlivewallpaper.settings.CharacterSetPreference;
 import com.gulshansingh.hackerlivewallpaper.thirdparty.ArrayDeque;
 
 import java.util.Random;
-import java.util.concurrent.Executors;
-import java.util.concurrent.ScheduledExecutorService;
-import java.util.concurrent.ScheduledFuture;
-import java.util.concurrent.TimeUnit;
 
 import static com.gulshansingh.hackerlivewallpaper.SettingsActivity.KEY_BIT_COLOR;
 import static com.gulshansingh.hackerlivewallpaper.SettingsActivity.KEY_CHANGE_BIT_SPEED;
@@ -26,11 +22,15 @@ import static com.gulshansingh.hackerlivewallpaper.SettingsActivity.KEY_NUM_BITS
 import static com.gulshansingh.hackerlivewallpaper.SettingsActivity.KEY_TEXT_SIZE;
 
 /**
- * A class that stores a list of bits. The first bit is removed and a new bit is
- * appended at a fixed interval. Calling the draw method of displays the bit
+ * A class that stores a list of bits. The first bit is removed and a new bit
+ * is appended at a fixed interval. Calling the draw method displays the bit
  * sequence vertically on the screen. Every time a bit is changed, the position
- * of the sequence on the screen will be shifted downward. Moving past the
- * bottom of the screen will cause the sequence to be placed above the screen
+ * of the sequence on the screen is shifted downward. Moving past the bottom of
+ * the screen causes the sequence to be placed above the screen.
+ *
+ * All state is owned by the render thread: {@link #update(long)} advances the
+ * animation based on elapsed time and {@link #draw(Canvas)} paints it. There
+ * are no background threads.
  *
  * @author Gulshan Singh
  */
@@ -47,37 +47,37 @@ public class BitSequence {
 	/** The Mask to use for regular text */
 	private static final BlurMaskFilter regularFilter = null;
 
+	/** The maximum random delay before a sequence starts falling, in ms */
+	private static final int MAX_START_DELAY = 6000;
+
 	/** The height of the screen */
 	private static int HEIGHT;
 
+	/** Reused for measuring text width, to avoid per-call allocations */
+	private static final Paint measurePaint = new Paint();
+
 	/** The bits this sequence stores */
-	private ArrayDeque<String> bits = new ArrayDeque<>();
+	private final ArrayDeque<String> bits = new ArrayDeque<>();
 
 	/** A variable used for all operations needing random numbers */
-	private Random r = new Random();
-
-	/** The scheduled operation for changing a bit and shifting downwards */
-	private ScheduledFuture<?> future;
+	private final Random r = new Random();
 
 	/** The position to draw the sequence at on the screen */
 	float x, y;
 
-	/** True when the BitSequence should be paused */
-	private boolean pause = false;
-
-	private static final ScheduledExecutorService scheduler = Executors
-			.newSingleThreadScheduledExecutor();
+	/** The uptime at which the next bit change should occur, in ms */
+	private long nextChangeTime;
 
 	/** The characters to use in the sequence */
 	private static String[] symbols = null;
 
 	/** Describes the style of the sequence */
 	private final Style style = new Style();
-    private static String charSet;
-    private static boolean isRandom = true;
-    private int curChar = 0;
+	private static String charSet;
+	private static boolean isRandom = true;
+	private int curChar = 0;
 
-    public static class Style {
+	public static class Style {
 		/** The default speed at which bits should be changed */
 		private static final int DEFAULT_CHANGE_BIT_SPEED = 100;
 
@@ -98,52 +98,53 @@ public class BitSequence {
 		private int fallingSpeed;
 		private BlurMaskFilter maskFilter;
 
-		private Paint paint = new Paint();
+		private final Paint paint = new Paint(Paint.ANTI_ALIAS_FLAG);
 
 		public static void initParameters(Context context) {
-            SharedPreferences sp = PreferenceManager
-                    .getDefaultSharedPreferences(context);
-            String charSetName = sp.getString("character_set_name", "Binary");
-            isRandom = true;
-            if (charSetName.equals("Binary")) {
-                charSet = CharacterSetPreference.BINARY_CHAR_SET;
-            } else if (charSetName.equals("Matrix")) {
-                charSet = CharacterSetPreference.MATRIX_CHAR_SET;
-            } else if (charSetName.equals("Custom (random characters)")) {
-                charSet = sp.getString("custom_character_set", "");
-                if (charSet.length() == 0) {
-                    throw new RuntimeException("Character set length can't be 0");
-                }
-            } else if (charSetName.equals("Custom (exact text)")) {
-                isRandom = false;
-                charSet = sp.getString("custom_character_string", "");
-                if (charSet.length() == 0) {
-                    throw new RuntimeException("Character set length can't be 0");
-                }
-            } else {
-                if (!charSetName.equals("Custom")) { // Legacy character set
-                    throw new RuntimeException("Invalid character set " + charSetName);
-                } else {
-                    sp.edit().putString("character_set_name", "Custom (random characters)")
-                            .commit();
-                    charSet = sp.getString("custom_character_set", "");
-                    if (charSet.length() == 0) {
-                        throw new RuntimeException("Character set length can't be 0");
-                    }
-                }
-            }
-            symbols = charSet.split("(?!^)");
+			SharedPreferences sp = PreferenceManager
+					.getDefaultSharedPreferences(context);
+			String charSetName = sp.getString("character_set_name", "Binary");
+			isRandom = true;
+			if (charSetName.equals("Binary")) {
+				charSet = CharacterSetPreference.BINARY_CHAR_SET;
+			} else if (charSetName.equals("Matrix")) {
+				charSet = CharacterSetPreference.MATRIX_CHAR_SET;
+			} else if (charSetName.equals("Custom (random characters)")) {
+				charSet = sp.getString("custom_character_set", "");
+				if (charSet.length() == 0) {
+					throw new RuntimeException("Character set length can't be 0");
+				}
+			} else if (charSetName.equals("Custom (exact text)")) {
+				isRandom = false;
+				charSet = sp.getString("custom_character_string", "");
+				if (charSet.length() == 0) {
+					throw new RuntimeException("Character set length can't be 0");
+				}
+			} else {
+				if (!charSetName.equals("Custom")) { // Legacy character set
+					throw new RuntimeException("Invalid character set " + charSetName);
+				} else {
+					sp.edit().putString("character_set_name", "Custom (random characters)")
+							.commit();
+					charSet = sp.getString("custom_character_set", "");
+					if (charSet.length() == 0) {
+						throw new RuntimeException("Character set length can't be 0");
+					}
+				}
+			}
+			symbols = charSet.split("(?!^)");
 
 			PreferenceUtility preferences = new PreferenceUtility(context);
 
-            if (isRandom) {
-                numBits = preferences.getInt(KEY_NUM_BITS,
-                        R.integer.default_num_bits);
-            } else {
-                numBits = charSet.length();
-            }
+			if (isRandom) {
+				numBits = preferences.getInt(KEY_NUM_BITS,
+						R.integer.default_num_bits);
+			} else {
+				numBits = charSet.length();
+			}
 			color = preferences
 					.getInt(KEY_BIT_COLOR, R.color.default_bit_color);
+
 			defaultTextSize = preferences.getInt(KEY_TEXT_SIZE,
 					R.integer.default_text_size);
 
@@ -171,8 +172,8 @@ public class BitSequence {
 		}
 
 		private static class PreferenceUtility {
-			private SharedPreferences preferences;
-			private Resources res;
+			private final SharedPreferences preferences;
+			private final Resources res;
 
 			public PreferenceUtility(Context context) {
 				preferences = PreferenceManager
@@ -197,28 +198,49 @@ public class BitSequence {
 
 	/**
 	 * Resets the sequence by repositioning it, resetting its visual
-	 * characteristics, and rescheduling the thread
+	 * characteristics, and scheduling its next bit change with a random delay
+	 *
+	 * @param now
+	 *            the current uptime in milliseconds
 	 */
-	private void reset() {
+	private void reset(long now) {
 		y = Style.initialY;
 		setDepth();
 		style.createPaint();
-		scheduleThread();
+		nextChangeTime = now + r.nextInt(MAX_START_DELAY);
 	}
 
 	/**
-	 * A runnable that changes the bit, moves the sequence down, and reschedules
-	 * its execution
+	 * Advances the animation to the given time, changing bits and moving the
+	 * sequence downward as needed. Must be called from the render thread.
+	 *
+	 * @param now
+	 *            the current uptime in milliseconds
 	 */
-	private final Runnable changeBitRunnable = new Runnable() {
-		public void run() {
+	public void update(long now) {
+		while (now >= nextChangeTime) {
 			changeBit();
 			y += style.fallingSpeed;
 			if (y > HEIGHT) {
-				reset();
+				reset(now);
+				return;
 			}
+			nextChangeTime += Style.changeBitSpeed;
 		}
-	};
+	}
+
+	/**
+	 * Realigns the sequence's schedule after the wallpaper was invisible, so
+	 * that it doesn't try to catch up on all the time that passed
+	 *
+	 * @param now
+	 *            the current uptime in milliseconds
+	 */
+	public void resume(long now) {
+		if (nextChangeTime < now) {
+			nextChangeTime = now + r.nextInt(Style.changeBitSpeed + 1);
+		}
+	}
 
 	private void setDepth() {
 		if (!Style.depthEnabled) {
@@ -262,87 +284,31 @@ public class BitSequence {
 		HEIGHT = height;
 	}
 
-	public BitSequence(int x) {
-        curChar = 0;
-        for (int i = 0; i < Style.numBits; i++) {
-            if (isRandom) {
-                bits.add(getRandomBit(r));
-            } else {
-                // TODO: Disable numBits in settings if custom is selected
-                bits.addFirst(getNextBit());
-            }
+	public BitSequence(int x, long now) {
+		for (int i = 0; i < Style.numBits; i++) {
+			if (isRandom) {
+				bits.add(getRandomBit(r));
+			} else {
+				bits.addFirst(getNextBit());
+			}
 		}
 		this.x = x;
-		reset();
-	}
-
-	/**
-	 * Pauses the BitSequence by cancelling the ScheduledFuture
-	 */
-	public void pause() {
-		if (!pause) {
-			if (future != null) {
-				future.cancel(true);
-			}
-			pause = true;
-		}
-	}
-
-	public void stop() {
-		pause();
-	}
-
-	/**
-	 * Unpauses the BitSequence by scheduling BitSequences on the screen to
-	 * immediately start, and scheduling BitSequences off the screen to start
-	 * after some delay
-	 */
-	public void unpause() {
-		if (pause) {
-			if (y <= Style.initialY + style.textSize || y > HEIGHT) {
-				scheduleThread();
-			} else {
-				scheduleThread(0);
-			}
-			pause = false;
-		}
-	}
-
-	/**
-	 * Schedules the changeBitRunnable with a random delay less than 6000
-	 * milliseconds, cancelling the previous scheduled future
-	 */
-	private void scheduleThread() {
-		scheduleThread(r.nextInt(6000));
-	}
-
-	/**
-	 * Schedules the changeBitRunnable with the specified delay, cancelling the
-	 * previous scheduled future
-	 *
-	 * @param delay
-	 *            the delay in milliseconds
-	 */
-	private void scheduleThread(int delay) {
-		if (future != null)
-			future.cancel(true);
-		future = scheduler.scheduleAtFixedRate(changeBitRunnable, delay,
-				Style.changeBitSpeed, TimeUnit.MILLISECONDS);
+		reset(now);
 	}
 
 	/** Shifts the bits back by one and adds a new bit to the end */
-	synchronized private void changeBit() {
-        if (isRandom) {
-            bits.removeFirst();
-            bits.addLast(getRandomBit(r));
-        }
+	private void changeBit() {
+		if (isRandom) {
+			bits.removeFirst();
+			bits.addLast(getRandomBit(r));
+		}
 	}
 
-    private String getNextBit() {
-        String s = Character.toString(charSet.charAt(curChar));
-        curChar = (curChar + 1) % charSet.length();
-        return s;
-    }
+	private String getNextBit() {
+		String s = Character.toString(charSet.charAt(curChar));
+		curChar = (curChar + 1) % charSet.length();
+		return s;
+	}
 
 	/**
 	 * Gets a new random bit
@@ -361,9 +327,8 @@ public class BitSequence {
 	 * @return the width of the BitSequence
 	 */
 	public static float getWidth() {
-		Paint paint = new Paint();
-		paint.setTextSize(Style.defaultTextSize);
-		return paint.measureText("0");
+		measurePaint.setTextSize(Style.defaultTextSize);
+		return measurePaint.measureText("0");
 	}
 
 	/**
@@ -372,8 +337,7 @@ public class BitSequence {
 	 * @param canvas
 	 *            the {@link Canvas} on which to draw the BitSequence
 	 */
-	synchronized public void draw(Canvas canvas) {
-		// TODO Can the get and set alphas be optimized?
+	public void draw(Canvas canvas) {
 		Paint paint = style.paint;
 		float bitY = y;
 		paint.setAlpha(Style.alphaIncrement);
