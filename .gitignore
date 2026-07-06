@@ -5,3 +5,5 @@ manifest-merger-release-report.txt
 local.properties
 /.idea
 build
+release.keystore
+keystore.properties
