@@ -9,7 +9,7 @@
         android:theme="@style/AppTheme">
 
         <service
-            android:name=".HackerWallpaperService"
+            android:name=".MatrixWallpaperService"
             android:label="@string/app_name"
             android:exported="true"
             android:permission="android.permission.BIND_WALLPAPER" >
@@ -19,12 +19,13 @@
 
             <meta-data
                 android:name="android.service.wallpaper"
-                android:resource="@xml/hacker_wp" />
+                android:resource="@xml/matrix_wp" />
         </service>
 
         <activity
             android:name=".SettingsActivity"
-            android:exported="true" >
+            android:exported="true"
+            android:label="@string/app_name" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 

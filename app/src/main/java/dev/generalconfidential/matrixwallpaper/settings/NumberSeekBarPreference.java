@@ -1,4 +1,4 @@
-package com.gulshansingh.hackerlivewallpaper.settings;
+package dev.generalconfidential.matrixwallpaper.settings;
 
 import android.content.Context;
 import android.util.AttributeSet;

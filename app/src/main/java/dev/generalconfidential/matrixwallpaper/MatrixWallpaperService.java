@@ -1,4 +1,4 @@
-package com.gulshansingh.hackerlivewallpaper;
+package dev.generalconfidential.matrixwallpaper;
 
 import android.content.SharedPreferences;
 import android.graphics.Canvas;
@@ -13,9 +13,9 @@ import android.view.SurfaceHolder;
 import java.util.ArrayList;
 import java.util.List;
 
-import static com.gulshansingh.hackerlivewallpaper.SettingsActivity.KEY_BACKGROUND_COLOR;
+import static dev.generalconfidential.matrixwallpaper.SettingsActivity.KEY_BACKGROUND_COLOR;
 
-public class HackerWallpaperService extends WallpaperService {
+public class MatrixWallpaperService extends WallpaperService {
 
 	private static boolean reset = false;
 	private static boolean previewReset = false;
@@ -27,10 +27,10 @@ public class HackerWallpaperService extends WallpaperService {
 
 	@Override
 	public Engine onCreateEngine() {
-		return new HackerWallpaperEngine();
+		return new MatrixWallpaperEngine();
 	}
 
-	public class HackerWallpaperEngine extends Engine implements
+	public class MatrixWallpaperEngine extends Engine implements
 			Choreographer.FrameCallback {
 
 		/**

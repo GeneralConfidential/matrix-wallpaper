@@ -1,4 +1,4 @@
-package com.gulshansingh.hackerlivewallpaper;
+package dev.generalconfidential.matrixwallpaper;
 
 import android.app.WallpaperManager;
 import android.content.ActivityNotFoundException;
@@ -53,8 +53,8 @@ public class SettingsActivity extends PreferenceActivity {
                     if (Build.VERSION.SDK_INT > 15) {
                         i.setAction(WallpaperManager.ACTION_CHANGE_LIVE_WALLPAPER);
 
-                        String p = HackerWallpaperService.class.getPackage().getName();
-                        String c = HackerWallpaperService.class.getCanonicalName();
+                        String p = MatrixWallpaperService.class.getPackage().getName();
+                        String c = MatrixWallpaperService.class.getCanonicalName();
                         i.putExtra(WallpaperManager.EXTRA_LIVE_WALLPAPER_COMPONENT, new ComponentName(p, c));
                     } else {
                         i.setAction(WallpaperManager.ACTION_LIVE_WALLPAPER_CHOOSER);
@@ -130,6 +130,6 @@ public class SettingsActivity extends PreferenceActivity {
     public void onStop() {
         super.onStop();
         BitSequence.configure(this);
-        HackerWallpaperService.reset();
+        MatrixWallpaperService.reset();
     }
 }

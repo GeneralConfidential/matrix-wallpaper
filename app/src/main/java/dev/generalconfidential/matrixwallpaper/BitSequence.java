@@ -1,4 +1,4 @@
-package com.gulshansingh.hackerlivewallpaper;
+package dev.generalconfidential.matrixwallpaper;
 
 import android.content.Context;
 import android.content.SharedPreferences;
@@ -9,17 +9,17 @@ import android.graphics.Canvas;
 import android.graphics.Paint;
 import android.preference.PreferenceManager;
 
-import com.gulshansingh.hackerlivewallpaper.settings.CharacterSetPreference;
-import com.gulshansingh.hackerlivewallpaper.thirdparty.ArrayDeque;
+import dev.generalconfidential.matrixwallpaper.settings.CharacterSetPreference;
+import dev.generalconfidential.matrixwallpaper.thirdparty.ArrayDeque;
 
 import java.util.Random;
 
-import static com.gulshansingh.hackerlivewallpaper.SettingsActivity.KEY_BIT_COLOR;
-import static com.gulshansingh.hackerlivewallpaper.SettingsActivity.KEY_CHANGE_BIT_SPEED;
-import static com.gulshansingh.hackerlivewallpaper.SettingsActivity.KEY_ENABLE_DEPTH;
-import static com.gulshansingh.hackerlivewallpaper.SettingsActivity.KEY_FALLING_SPEED;
-import static com.gulshansingh.hackerlivewallpaper.SettingsActivity.KEY_NUM_BITS;
-import static com.gulshansingh.hackerlivewallpaper.SettingsActivity.KEY_TEXT_SIZE;
+import static dev.generalconfidential.matrixwallpaper.SettingsActivity.KEY_BIT_COLOR;
+import static dev.generalconfidential.matrixwallpaper.SettingsActivity.KEY_CHANGE_BIT_SPEED;
+import static dev.generalconfidential.matrixwallpaper.SettingsActivity.KEY_ENABLE_DEPTH;
+import static dev.generalconfidential.matrixwallpaper.SettingsActivity.KEY_FALLING_SPEED;
+import static dev.generalconfidential.matrixwallpaper.SettingsActivity.KEY_NUM_BITS;
+import static dev.generalconfidential.matrixwallpaper.SettingsActivity.KEY_TEXT_SIZE;
 
 /**
  * A class that stores a list of bits. The first bit is removed and a new bit

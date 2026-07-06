@@ -9,16 +9,16 @@ if (keystorePropsFile.exists()) {
 }
 
 android {
-    namespace 'com.gulshansingh.hackerlivewallpaper'
+    namespace 'dev.generalconfidential.matrixwallpaper'
     compileSdk 36
     buildToolsVersion '35.0.0'
 
     defaultConfig {
-        applicationId "com.gulshansingh.hackerlivewallpaper"
+        applicationId "dev.generalconfidential.matrixwallpaper"
         minSdkVersion 21
         targetSdkVersion 36
-        versionCode 14
-        versionName "2.0.0"
+        versionCode 15
+        versionName "2.1.0"
     }
 
     compileOptions {

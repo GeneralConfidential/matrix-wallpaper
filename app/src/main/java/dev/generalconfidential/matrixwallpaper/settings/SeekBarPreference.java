@@ -1,4 +1,4 @@
-package com.gulshansingh.hackerlivewallpaper.settings;
+package dev.generalconfidential.matrixwallpaper.settings;
 
 import android.content.Context;
 import android.content.SharedPreferences;
@@ -11,8 +11,8 @@ import android.view.View;
 import android.widget.SeekBar;
 import android.widget.TextView;
 
-import com.gulshansingh.hackerlivewallpaper.R;
-import com.gulshansingh.hackerlivewallpaper.Refreshable;
+import dev.generalconfidential.matrixwallpaper.R;
+import dev.generalconfidential.matrixwallpaper.Refreshable;
 
 public abstract class SeekBarPreference extends DialogPreference implements
 		Refreshable {

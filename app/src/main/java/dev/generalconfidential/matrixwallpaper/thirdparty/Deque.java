@@ -33,7 +33,7 @@
  * at http://creativecommons.org/publicdomain/zero/1.0/
  */
 
-package com.gulshansingh.hackerlivewallpaper.thirdparty;
+package dev.generalconfidential.matrixwallpaper.thirdparty;
 
 import java.util.Collection;
 import java.util.Iterator;
