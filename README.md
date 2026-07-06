@@ -1,5 +1,7 @@
-Hacker Live Wallpaper (Modernized Fork)
-========================================
+Matrix Wallpaper
+================
+
+A modernized fork of Hacker Live Wallpaper.
 
 An Android live wallpaper of bit sequences streaming down the screen.
 
